@@ -3,35 +3,31 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-	performance: { hints: false },
+  performance: { hints: false },
 
-	resolve: {
-		extensions: [ '.js', '.jsx', '.ts', '.tsx' ],
-		modules: [ 'node_modules', 'src' ],
-		alias: {
-			'react': 'preact/compat',
-			'react-dom': 'preact/compat',
-		},
-	},
+  resolve: {
+    extensions: [ '.js', '.ts' ],
+    modules: [ 'node_modules', 'src' ],
+  },
 
-	output: {
-		filename: 'bundle.[hash].js',
-		path: getPath('dist'),
-	},
+  output: {
+    filename: 'bundle.[hash].js',
+    path: getPath('dist'),
+  },
 
-	module: {
-		rules: [
-			{
-				test: /\.(j|t)sx?$/,
-				loader: 'babel-loader',
-			},
-		]
-	},
+  module: {
+    rules: [
+      {
+        test: /\.(j|t)s$/,
+        loader: 'babel-loader',
+      },
+    ]
+  },
 
-	plugins: [
-		new HtmlWebpackPlugin({
-			template: getPath('src', 'index.html'),
-		}),
-		new CleanWebpackPlugin(),
-	],
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: getPath('src', 'index.html'),
+    }),
+    new CleanWebpackPlugin(),
+  ],
 };

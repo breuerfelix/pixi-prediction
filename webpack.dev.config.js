@@ -6,21 +6,21 @@ const { getPath } = require('./utils');
 const { PORT } = process.env;
 
 module.exports = merge(common, {
-	entry: [ getPath('entry-dev.js'), getPath('src') ],
+  entry: [ getPath('src') ],
 
-	mode: 'development',
-	devtool: 'cheap-module-eval-source-map',
+  mode: 'development',
+  devtool: 'eval',
 
-	plugins: [
-		new webpack.HotModuleReplacementPlugin(),
-	],
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+  ],
 
-	devServer: {
-		port: PORT || 8080,
-		hot: true,
-		inline: true,
-		progress: true,
-		compress: true,
-		historyApiFallback: true,
-	},
+  devServer: {
+    port: PORT || 8080,
+    hot: true,
+    inline: true,
+    progress: true,
+    compress: true,
+    historyApiFallback: true,
+  },
 });

@@ -1,19 +1,17 @@
 {
-	"compilerOptions": {
-		"esModuleInterop": true,
-		"typeRoots": [ "node_modules/@types" ],
-		"checkJs": true,
-		"allowJs": true,
-		"noEmit": true,
-		"jsx": "react",
-		"rootDirs": [ "src" ],
-		"baseUrl": "src"
-	},
-	"include": [
-		"src/**/*.tsx",
-		"src/**/*.ts",
-		"src/**/*.js",
-		"src/**/*.jsx"
-	],
-	"exclude": [ "node_modules" ]
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "typeRoots": [ "./types", "node_modules/@types" ],
+    "moduleResolution": "node",
+    "checkJs": true,
+    "allowJs": true,
+    "noEmit": true,
+    "rootDirs": [ "src" ],
+    "baseUrl": "src",
+    "downlevelIteration": true
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [ "node_modules" ]
 }

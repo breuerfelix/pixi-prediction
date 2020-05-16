@@ -1,28 +1,24 @@
 env:
   es6: true
   browser: true
+  jest/globals: true
 plugins:
-  - 'react'
   - '@typescript-eslint'
+  - 'jest'
 extends:
   - 'eslint:recommended'
-  - 'plugin:react/recommended'
   - 'plugin:@typescript-eslint/eslint-recommended'
   - 'plugin:@typescript-eslint/recommended'
-parser: 'babel-eslint'
+parser: '@typescript-eslint/parser'
 parserOptions:
   ecmaVersion: 2018
   sourceType: module
   ecmaFeatures:
-    jsx: true
     legacyDecorators: true
-settings:
-  react:
-    version: '16'
 rules:
-  'indent':
+  'indent': 
     - error
-    - tab
+    - 2
     - SwitchCase: 1
   'linebreak-style':
     - error
@@ -35,20 +31,10 @@ rules:
     - always
   'no-console': off
   'no-empty': error
-  'keyword-spacing':
-    - error
-  'no-mixed-spaces-and-tabs':
-    - error
-  'object-curly-spacing':
-    - error
-    - always
-  'no-trailing-spaces':
-    - error
-  'react/jsx-curly-spacing':
-    - error
-    - when: 'never'
-      spacing:
-        objectLiterals: 'never'
-  'react/prop-types': error
-  'react/no-unused-prop-types': error
-  'react/jsx-key': error
+  'keyword-spacing': error
+  'no-mixed-spaces-and-tabs': error
+  'no-trailing-spaces': error
+  'max-len': warn
+  '@typescript-eslint/ban-ts-ignore': off
+  '@typescript-eslint/no-explicit-any': off
+  '@typescript-eslint/no-empty-function': warn
