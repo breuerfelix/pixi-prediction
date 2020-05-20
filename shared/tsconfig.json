@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "typeRoots": [ "node_modules/@types" ],
+    "moduleResolution": "node",
+    "checkJs": true,
+    "allowJs": true,
+    "declaration": true,
+    "outDir": "dist",
+    "baseUrl": "src",
+    "rootDirs": ["src"],
+    "downlevelIteration": true
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [ "node_modules" ]
+}
