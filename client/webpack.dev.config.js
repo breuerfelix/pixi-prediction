@@ -9,7 +9,7 @@ module.exports = merge(common, {
   entry: [ getPath('src') ],
 
   mode: 'development',
-  devtool: 'eval',
+  devtool: 'none',
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(),

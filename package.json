@@ -1,56 +1,29 @@
 {
   "name": "archaac",
-  "version": "0.0.1",
-  "description": "2D BrowserGame made with LOVE",
-  "main": "src/index.ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "test": "npm run lint && npm run typecheck && npm run jest",
-    "start": "webpack-dev-server --open --config webpack.dev.config.js",
-    "build": "webpack --config webpack.prod.config.js",
-    "jest": "jest",
-    "lint": "eslint --config .eslintrc.yml --ext js --ext ts src",
-    "lint:fix": "npm run lint -- --fix",
-    "typecheck": "tsc",
-    "test:prod": "http-server dist",
-    "update": "ncu"
+    "test": "npm run lint",
+    "lint": "eslint --config .eslintrc.yml --ext js --ext ts client/src server/src shared/src",
+    "lint:fix": "npm run lint -- --fix"
   },
-  "pre-commit": [
-    "lint:fix"
-  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/breuerfelix/archaac.git"
+  },
   "keywords": [],
-  "author": "Felix Breuer",
-  "license": "MIT",
-  "dependencies": {
-    "@babel/runtime": "^7.7.2",
-    "jest": "^26.0.1",
-    "pino": "^6.2.1",
-    "pixi-text-input": "^1.0.5",
-    "pixi.js": "^5.2.2",
-    "vector2d-extended": "^0.1.1"
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/breuerfelix/archaac/issues"
   },
+  "homepage": "https://github.com/breuerfelix/archaac#readme",
   "devDependencies": {
-    "@babel/core": "^7.7.2",
-    "@babel/plugin-transform-runtime": "^7.6.2",
-    "@babel/preset-env": "^7.7.1",
-    "@babel/preset-typescript": "^7.7.4",
-    "@types/jest": "^25.2.1",
-    "@types/pino": "^6.0.0",
-    "@typescript-eslint/eslint-plugin": "^2.8.0",
-    "@typescript-eslint/parser": "^2.30.0",
-    "babel-eslint": "^10.0.3",
-    "babel-loader": "^8.0.6",
-    "clean-webpack-plugin": "^3.0.0",
-    "eslint": "^6.6.0",
-    "eslint-plugin-jest": "^23.10.0",
-    "html-webpack-plugin": "^3.2.0",
-    "http-server": "^0.11.1",
-    "npm-check-updates": "^3.2.1",
-    "pre-commit": "^1.2.2",
-    "typescript": "^3.7.2",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0",
-    "webpack-merge": "^4.2.2",
-    "workbox-webpack-plugin": "^4.3.1"
+    "@typescript-eslint/eslint-plugin": "^2.34.0",
+    "@typescript-eslint/parser": "^2.34.0",
+    "eslint": "^7.0.0",
+    "eslint-plugin-jest": "^23.13.1",
+    "typescript": "^3.9.3"
   }
 }

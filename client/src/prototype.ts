@@ -37,7 +37,7 @@ class Player {
   destVec: Vector;
 
   constructor() {
-    this.speed = 25;
+    this.speed = 30;
 
     this.sprite = new Graphics();
     this.sprite
