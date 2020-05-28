@@ -3,11 +3,11 @@
     "esModuleInterop": true,
     "typeRoots": [ "./types", "node_modules/@types" ],
     "moduleResolution": "node",
-    "checkJs": true,
     "allowJs": true,
     "noEmit": true,
     "rootDirs": [ "src" ],
     "baseUrl": "src",
+    "lib": [ "dom", "es6" ],
     "downlevelIteration": true
   },
   "include": [

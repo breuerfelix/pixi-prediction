@@ -3,7 +3,6 @@ import {MIN_WIDTH, MIN_HEIGHT} from 'config/constants';
 import {PinnedContainer, resizeCallback} from 'gamixi/pinned-container';
 import Store from 'singletons/store';
 import {Event, Type} from 'singletons/event';
-import {input} from 'singletons/input';
 
 import proto from 'prototype';
 
@@ -23,7 +22,6 @@ const renderer = new Renderer({
 const ticker = new Ticker();
 
 Store.init(renderer, ticker);
-input.subscribe();
 
 PinnedContainer.subscribeResizeEvent =
   (fn: resizeCallback): (() => void) => {

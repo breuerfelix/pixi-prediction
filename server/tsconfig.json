@@ -3,7 +3,6 @@
     "esModuleInterop": true,
     "typeRoots": [ "node_modules/@types" ],
     "moduleResolution": "node",
-    "checkJs": true,
     "allowJs": true,
     "declaration": false,
     "outDir": "dist",
