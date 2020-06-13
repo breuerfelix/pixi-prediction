@@ -1,5 +1,5 @@
 {
-  "name": "shared",
+  "name": "lib",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -17,8 +17,6 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
-    "lib": "file:../lib",
-    "shortid": "^2.2.15",
-    "vector2d-extended": "^0.1.1"
+    "shortid": "^2.2.15"
   }
 }

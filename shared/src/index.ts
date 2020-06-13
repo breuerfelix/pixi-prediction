@@ -1,16 +1,6 @@
-import Unique from './unique';
-import Entity from './entity';
-import BasicLoop from './loop';
-import {Input, input, Action} from './input';
-import {BasePlayer, Position} from './player';
+import {Entity, Component} from './ecs'
 
 export {
-  Unique,
-  BasicLoop,
   Entity,
-  Input,
-  input,
-  Action,
-  BasePlayer,
-  Position,
+  Component,
 };

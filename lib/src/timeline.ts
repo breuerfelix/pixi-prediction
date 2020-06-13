@@ -3,7 +3,7 @@ interface Data<T> {
   mutable: boolean;
 }
 
-export class Timeline<T> {
+export class TimelineData<T> {
   data = new Map<number, Data<T>>();
   timestamps = new Array<number>();
 
@@ -13,6 +13,7 @@ export class Timeline<T> {
       this.timestamps.sort();
     } else {
       const data = this.data.get(timestamp);
+      // data cannot be modified
       if (!data.mutable) return;
     }
 
@@ -28,13 +29,13 @@ export class Timeline<T> {
       return this.data.get(timestamp).data;
     }
 
-    // return the last timestamp in memory
+    // return last state if none found
     return this.data.get(
       this.timestamps[this.size() - 1],
     ).data;
   }
 
-  clean(timestamp: number): void {
+  clear(timestamp: number): void {
     // always keep the last sample
     while (this.timestamps.length > 1) {
       const firstItem = this.timestamps[0];

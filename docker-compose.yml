@@ -1,0 +1,39 @@
+version: '3'
+services:
+  lib:
+    image: node:12-alpine
+    command: npm run watch
+    working_dir: /usr/game/lib
+    user: 1000:1000
+    volumes:
+      - ./lib:/usr/game/lib
+  shared:
+    image: node:12-alpine
+    command: npm run watch
+    working_dir: /usr/game/shared
+    user: 1000:1000
+    volumes:
+      - ./shared:/usr/game/shared
+      - ./lib:/usr/game/lib
+  client:
+    image: node:12-alpine
+    command: npm run watch
+    working_dir: /usr/game/client
+    user: 1000:1000
+    ports:
+      - 8080:8080
+    volumes:
+      - ./client:/usr/game/client
+      - ./lib:/usr/game/lib
+      - ./shared:/usr/game/shared
+  server:
+    image: node:12-alpine
+    command: npm run watch
+    working_dir: /usr/game/server
+    user: 1000:1000
+    ports:
+      - 9001:9001
+    volumes:
+      - ./server:/usr/game/server
+      - ./lib:/usr/game/lib
+      - ./shared:/usr/game/shared

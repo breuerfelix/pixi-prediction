@@ -1,9 +1,5 @@
 export class EventSystem<T> {
-  events: Map<T, Set<Function>>;
-
-  constructor() {
-    this.events = new Map();
-  }
+  events = new Map<T, Set<Function>>();
 
   on(event: T, callback: Function): () => void {
     let set = this.events.get(event);
@@ -32,5 +28,3 @@ export class EventSystem<T> {
     set.forEach(callback => callback(...data));
   }
 }
-
-export default EventSystem;

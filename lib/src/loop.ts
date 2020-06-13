@@ -1,7 +1,7 @@
-abstract class BasicLoop {
+export abstract class BasicLoop {
   delta: number;
   accumulator = 0;
-  maxLag = 10000;
+  maxLag = 5 * 1000;
 
   lastLoop: number;
   lastUpdate: number;
@@ -55,5 +55,3 @@ abstract class BasicLoop {
     this.lastLoop = otherTickTime;
   }
 }
-
-export default BasicLoop;

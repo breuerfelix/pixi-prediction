@@ -1,4 +1,4 @@
-import EventSystem from './event-system';
+import {EventSystem} from './event-system';
 
 interface KeyStatus {
   down: number;

@@ -1,16 +1,17 @@
+/*
 import Vector from 'vector2d-extended';
 import Entity from './entity';
 import {input, Action} from './input';
-import {Timeline} from './timeline';
+import {TimelineData} from './timeline';
 
 export interface Position {
   posVec: Vector;
   destVec: Vector;
 }
 
-export class BasePlayer extends Entity {
+export abstract class BasePlayer extends Entity {
   speed = 20;
-  positions = new Timeline<Position>();
+  positions = new TimelineData<Position>();
 
   constructor(
     x: number, y: number, id: string = null,
@@ -60,3 +61,4 @@ export class BasePlayer extends Entity {
     return { position };
   }
 }
+*/

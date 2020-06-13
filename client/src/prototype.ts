@@ -1,48 +1,17 @@
 import Store from 'singletons/store';
 import {Container, Graphics} from 'pixi.js';
-import {input} from 'shared';
-import {BasicLoop, Entity} from 'shared';
-import {Player} from './player';
-import Vector from 'vector2d-extended';
+import loop from 'global/loop';
+import entityManager from 'global/ecs';
+import {eventSystem, Event} from 'global/event';
+//import {Player} from './player';
 
-let LOOP: Loop =  null;
-const STAGE = new Container();
 let ping = 0;
 
-window.addEventListener('keyup', e => input.upListener(e.code, ping / 2));
-window.addEventListener('keydown', e => input.downListener(e.code, ping / 2));
+// TODO recent pings as ringbuffer
+//window.addEventListener('keyup', e => input.upListener(e.code, ping / 2));
+//window.addEventListener('keydown', e => input.downListener(e.code, ping / 2));
 
-class Loop extends BasicLoop {
-  constructor() {
-    super();
-    requestAnimationFrame(this.tick.bind(this));
-  }
-
-  fixedUpdate(lastUpdate: number, delta: number): void {
-    Entity.fixedUpdate(lastUpdate, delta);
-  }
-
-  alphaUpdate(
-    lastUpdate: number, delta: number, alpha: number,
-  ): void {
-    Entity.alphaUpdate(lastUpdate, delta, alpha);
-    Store.renderer.render(STAGE);
-    requestAnimationFrame(this.tick.bind(this));
-  }
-
-  rollback(timestamp: number): void {
-    // return if the server timestamp is ahead
-    if (timestamp >= this.lastUpdate) return;
-
-    this.lastUpdate = timestamp;
-    this.lastLoop = timestamp;
-    this.accumulator = 0;
-    // TODO clean input after timestamp
-    // TODO clean timelines after timestamp
-  }
-}
-
-let player: Player = null;
+//let player: Player = null;
 class Socket {
   websocket: WebSocket;
   pingInterval: number;
@@ -61,15 +30,15 @@ class Socket {
 
     // TODO
     // some sort of clean correction from client -- maybe use the ping as indicator ?
-    input.on('up', (code: string) => {
-      const data = { type: 'input', action: 'up', code };
-      this.send(data);
-    });
+    //input.on('up', (code: string) => {
+      //const data = { type: 'input', action: 'up', code };
+      //this.send(data);
+    //});
 
-    input.on('down', (code: string) => {
-      const data = { type: 'input', action: 'down', code };
-      this.send(data);
-    });
+    //input.on('down', (code: string) => {
+      //const data = { type: 'input', action: 'down', code };
+      //this.send(data);
+    //});
 
     setInterval(() => {
       if (this.pingTimers.length < 1) {
@@ -114,34 +83,42 @@ class Socket {
     this.send(sync);
   }
 
-  message(message): void {
+  message(message: any): void {
     const data = JSON.parse(message.data);
-    if (data.type == 'sync') {
-      LOOP.sync(data.timestamp);
+    //console.log('message received', data)
 
-      //const player = new Player(50, 50);
-      //STAGE.addChild(player.sprite);
+    if (data.type == 'sync') {
+      loop.sync(data.timestamp);
+    }
+
+    if (data.type == 'ecs') {
+      const entities = data.data;
+      for (const ent of entities) {
+        const entity = entityManager.entityMap.get(ent.ID);
+
+        if (!entity) {
+          entityManager.add(ent);
+          eventSystem.emit(Event.NewEntity, ent);
+        } else {
+          for (const key of Object.keys(ent)) {
+            entity[key] = ent[key];
+          }
+        }
+
+      }
     }
 
     if (data.type == 'serverUpdate') {
       const ping = Date.now() - data.now;
       this.pingTimers.push(ping);
 
-      Entity.serverUpdate(data.lastUpdate, data.delta, data.data);
-      LOOP.rollback(data.lastUpdate + data.delta);
-    }
-
-    if (data.type == 'player') {
-      if (data.action == 'create') {
-        player = new Player(data.x, data.y, data.id);
-        STAGE.addChild(player.sprite);
-      }
+      //Entity.serverUpdate(data.lastUpdate, data.delta, data.data);
+      loop.rollback(data.lastUpdate + data.delta);
     }
   }
 }
 
 function init(): void {
-  LOOP = new Loop();
   const socket = new Socket();
 }
 

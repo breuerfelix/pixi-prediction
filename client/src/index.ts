@@ -2,7 +2,6 @@ import {Renderer, Ticker} from 'pixi.js';
 import {MIN_WIDTH, MIN_HEIGHT} from 'config/constants';
 import {PinnedContainer, resizeCallback} from 'gamixi/pinned-container';
 import Store from 'singletons/store';
-import {Event, Type} from 'singletons/event';
 
 import proto from 'prototype';
 
@@ -25,7 +24,8 @@ Store.init(renderer, ticker);
 
 PinnedContainer.subscribeResizeEvent =
   (fn: resizeCallback): (() => void) => {
-    return Event.on(Type.Resized, fn);
+    //return Event.on(Type.Resized, fn);
+    return;
   };
 
 // Resize
@@ -36,7 +36,7 @@ function resize(): void {
     window.innerHeight > MIN_HEIGHT ? window.innerHeight : MIN_HEIGHT;
 
   renderer.resize(targetWidth, targetHeight);
-  Event.emit(Type.Resized);
+  //Event.emit(Type.Resized);
 }
 
 window.addEventListener('resize', resize);

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node dist/index.js",
-    "watch": "nodemon -e ts,js -w src -w ../shared/dist -x npm run dev",
+    "watch": "nodemon -e ts,js -w src -w ../shared/dist -w ../lib/dist -x npm run dev",
     "dev": "ts-node src",
     "build": "tsc",
     "test": "",
@@ -28,6 +28,7 @@
     "typescript": "^3.7.2"
   },
   "dependencies": {
+    "lib": "file:../lib",
     "pino": "^6.2.1",
     "pino-pretty": "^4.0.0",
     "shared": "file:../shared",

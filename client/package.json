@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "npm run typecheck && npm run jest",
-    "watch": "nodemon -e ts,js -w ../shared/dist -x npm run start",
+    "watch": "nodemon -e ts,js -w ../shared/dist -w ../lib/dist -x npm run start",
     "start": "webpack-dev-server --config webpack.dev.config.js",
     "build": "webpack --config webpack.prod.config.js",
     "jest": "jest",
@@ -18,19 +18,23 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.7.2",
+    "lib": "file:../lib",
     "pino": "^6.2.1",
     "pixi-text-input": "^1.0.5",
     "pixi.js": "^5.2.2",
     "shared": "file:../shared",
+    "stats.js": "^0.17.0",
     "vector2d-extended": "^0.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
+    "@babel/plugin-proposal-class-properties": "^7.10.1",
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.7.1",
     "@babel/preset-typescript": "^7.7.4",
     "@types/jest": "^25.2.1",
     "@types/pino": "^6.0.0",
+    "@types/stats.js": "^0.17.0",
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
     "eslint": "^6.6.0",
