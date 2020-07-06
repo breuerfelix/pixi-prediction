@@ -1,152 +1,148 @@
 import Store from 'singletons/store';
 import {Container, Graphics} from 'pixi.js';
-import {input, Action} from 'singletons/input';
+import {input} from 'shared';
+import {BasicLoop, Entity} from 'shared';
+import {Player} from './player';
 import Vector from 'vector2d-extended';
 
-class State {
-  entities: any[];
+let LOOP: Loop =  null;
+const STAGE = new Container();
+let ping = 0;
+
+window.addEventListener('keyup', e => input.upListener(e.code, ping / 2));
+window.addEventListener('keydown', e => input.downListener(e.code, ping / 2));
+
+class Loop extends BasicLoop {
+  constructor() {
+    super();
+    requestAnimationFrame(this.tick.bind(this));
+  }
+
+  fixedUpdate(lastUpdate: number, delta: number): void {
+    Entity.fixedUpdate(lastUpdate, delta);
+  }
+
+  alphaUpdate(
+    lastUpdate: number, delta: number, alpha: number,
+  ): void {
+    Entity.alphaUpdate(lastUpdate, delta, alpha);
+    Store.renderer.render(STAGE);
+    requestAnimationFrame(this.tick.bind(this));
+  }
+
+  rollback(timestamp: number): void {
+    // return if the server timestamp is ahead
+    if (timestamp >= this.lastUpdate) return;
+
+    this.lastUpdate = timestamp;
+    this.lastLoop = timestamp;
+    this.accumulator = 0;
+    // TODO clean input after timestamp
+    // TODO clean timelines after timestamp
+  }
+}
+
+let player: Player = null;
+class Socket {
+  websocket: WebSocket;
+  pingInterval: number;
+
+  pingTimers: number[];
 
   constructor() {
-    this.entities = [];
+    const username = 'player1';
+    this.pingTimers = [];
+
+    this.websocket = new WebSocket(`ws://localhost:9001/?${username}`);
+
+    this.websocket.onmessage = this.message.bind(this);
+    this.websocket.onclose = this.close.bind(this);
+    this.websocket.onopen = this.open.bind(this);
+
+    // TODO
+    // some sort of clean correction from client -- maybe use the ping as indicator ?
+    input.on('up', (code: string) => {
+      const data = { type: 'input', action: 'up', code };
+      this.send(data);
+    });
+
+    input.on('down', (code: string) => {
+      const data = { type: 'input', action: 'down', code };
+      this.send(data);
+    });
+
+    setInterval(() => {
+      if (this.pingTimers.length < 1) {
+        ping = 0;
+        return;
+      }
+
+      ping = this.pingTimers.reduce((a, b) => a + b, 0) / this.pingTimers.length * 2;
+      this.pingTimers = [];
+
+      console.log('ping', ping);
+    }, 3000);
   }
 
-  fixUpdate(lastUpdate: number, delta: number): void {
-    for (const ent of this.entities) {
-      ent.fixUpdate(lastUpdate, delta);
+  close(): void {
+    console.log('socket closed');
+    clearInterval(this.pingInterval);
+    ping = 0;
+    this.pingTimers = [];
+  }
+
+  send(obj): void {
+    if (this.websocket.readyState != this.websocket.OPEN) {
+      console.log('not open', this.websocket.readyState);
+      return;
     }
+
+    // TODO use flatbuffers
+    this.websocket.send(JSON.stringify(obj));
   }
 
-  postFixUpdate(lastUpdate: number, delta: number): void {
-    for (const ent of this.entities) {
-      ent.postFixUpdate(lastUpdate, delta);
+  open(): void {
+    console.log('socket opened');
+    this.pingInterval = setInterval(() => {
+      this.send({ type:'ping' });
+    }, 150 * 1000);
+
+    const sync = {
+      type: 'sync',
+    };
+
+    this.send(sync);
+  }
+
+  message(message): void {
+    const data = JSON.parse(message.data);
+    if (data.type == 'sync') {
+      LOOP.sync(data.timestamp);
+
+      //const player = new Player(50, 50);
+      //STAGE.addChild(player.sprite);
     }
-  }
 
-  renderUpdate(alpha: number): void {
-    for (const ent of this.entities) {
-      ent.renderUpdate(alpha);
+    if (data.type == 'serverUpdate') {
+      const ping = Date.now() - data.now;
+      this.pingTimers.push(ping);
+
+      Entity.serverUpdate(data.lastUpdate, data.delta, data.data);
+      LOOP.rollback(data.lastUpdate + data.delta);
+    }
+
+    if (data.type == 'player') {
+      if (data.action == 'create') {
+        player = new Player(data.x, data.y, data.id);
+        STAGE.addChild(player.sprite);
+      }
     }
   }
 }
 
-class Player {
-  sprite: Graphics;
-  speed: number;
-
-  posVec: Vector;
-  destVec: Vector;
-
-  constructor() {
-    this.speed = 30;
-
-    this.sprite = new Graphics();
-    this.sprite
-      .beginFill(0xDE3249)
-      .drawRect(50, 50, 100, 100)
-      .endFill();
-
-    this.posVec = new Vector(50, 50);
-    this.destVec = new Vector(0, 0);
-  }
-
-  fixUpdate(lastUpdate: number, delta: number): void {
-    const now = lastUpdate + delta;
-    this.posVec.add(this.destVec);
-    this.destVec = new Vector(0, 0);
-
-    if (input.isPressed(now, Action.moveUp)) {
-      this.destVec.add(new Vector(0, -1));
-    }
-
-    if (input.isPressed(now, Action.moveDown)) {
-      this.destVec.add(new Vector(0, 1));
-    }
-
-    if (input.isPressed(now, Action.moveRight)) {
-      this.destVec.add(new Vector(1, 0));
-    }
-
-    if (input.isPressed(now, Action.moveLeft)) {
-      this.destVec.add(new Vector(-1, 0));
-    }
-
-    //this.destVec.magnitude = this.speed;
-    if (this.destVec.x == 0 && this.destVec.y == 0) return;
-
-    this.destVec.magnitude = this.speed;
-  }
-
-  postFixUpdate(lastUpdate: number, delta: number): void { }
-
-  renderUpdate(alpha: number): void {
-    // TODO calculate with vectors here
-    // last x + alpha * vektor = destination
-    //const x = this.currentX * alpha + this.lastX * (1 - alpha);
-    //const y = this.currentY * alpha + this.lastY * (1 - alpha);
-    //
-    const stepVec = Vector.add(this.posVec, Vector.multiply(this.destVec, alpha));
-    this.sprite.position.set(stepVec.x, stepVec.y);
-  }
-
-}
-
-class Prototype {
-  dt: number;
-  acc: number;
-
-  lastRenderUpdate: number;
-  lastFixUpdate: number;
-
-  state: State;
-
-  constructor() {
-    const container = new Container();
-    Store.changeScene(container);
-
-    this.lastRenderUpdate = Date.now();
-    this.lastFixUpdate = Date.now();
-    this.acc = 0;
-    const hz = 15;
-    this.dt = 1 / hz * 1000; // 15hz
-
-
-    this.state = new State();
-
-    const player = new Player();
-    this.state.entities.push(player);
-
-    container.addChild(player.sprite);
-
-    Store.ticker.add(this.fixed.bind(this));
-  }
-
-  fixed(): void {
-    const now = Date.now();
-    const frameTime = now - this.lastRenderUpdate;
-    this.lastRenderUpdate = now;
-
-    this.acc += frameTime;
-
-    while (this.acc >= this.dt) {
-      this.state.fixUpdate(this.lastFixUpdate, this.dt);
-      this.state.postFixUpdate(this.lastFixUpdate, this.dt);
-
-      // TODO remove this
-      input.fixedUpdate(this.lastFixUpdate + this.dt);
-
-      this.lastFixUpdate += this.dt;
-      this.acc -= this.dt;
-    }
-
-    const alpha = this.acc / this.dt;
-    this.state.renderUpdate(alpha);
-
-    Store.renderer.render(Store.activeScene);
-  }
-}
-
-function init() {
-  const proto = new Prototype();
+function init(): void {
+  LOOP = new Loop();
+  const socket = new Socket();
 }
 
 export default init;

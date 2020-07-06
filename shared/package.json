@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "watch": "nodemon -e ts,js -w src -x npm run build"
@@ -11,7 +12,12 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/shortid": "0.0.29",
     "nodemon": "^2.0.4",
     "typescript": "^3.9.3"
+  },
+  "dependencies": {
+    "shortid": "^2.2.15",
+    "vector2d-extended": "^0.1.1"
   }
 }

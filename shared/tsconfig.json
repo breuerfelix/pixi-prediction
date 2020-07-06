@@ -3,16 +3,17 @@
     "esModuleInterop": true,
     "typeRoots": [ "node_modules/@types" ],
     "moduleResolution": "node",
-    "checkJs": true,
     "allowJs": true,
     "declaration": true,
+    "target": "ES6",
+    "module": "ES6",
     "outDir": "dist",
-    "baseUrl": "src",
-    "rootDirs": ["src"],
+    "lib": [ "ES6", "DOM"],
     "downlevelIteration": true
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "src/**/*.js"
   ],
-  "exclude": [ "node_modules" ]
+  "exclude": [ "node_modules", "dist" ]
 }
