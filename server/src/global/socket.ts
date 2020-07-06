@@ -43,7 +43,8 @@ app.ws('/*', {
     const ID = generateID();
     const player = {
       ID,
-      position: { x: 10, y: 10 },
+      position: { x: 0, y: 0, z: 0 },
+      socket: { ws },
     };
 
     entityManager.add(player);
@@ -53,8 +54,6 @@ app.ws('/*', {
       username,
       websocket: ws,
     };
-
-    ws.subscribe('/ecs');
   },
   message: (ws, message) => {
     const data = JSON.parse(enc.decode(message));

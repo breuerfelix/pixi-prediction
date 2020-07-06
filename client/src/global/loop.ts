@@ -1,11 +1,8 @@
-import Store from 'singletons/store';
 import {BasicLoop} from 'lib';
 import Stats from 'stats.js';
-import {Container} from 'pixi.js';
-import entityManager from 'global/ecs';
+//import entityManager from 'global/ecs';
 import {RenderSystem} from 'systems/render';
-
-const STAGE = new Container();
+import engine from 'global/engine';
 
 class Loop extends BasicLoop {
   fps = new Stats();
@@ -37,10 +34,15 @@ class Loop extends BasicLoop {
   alphaUpdate(
     lastUpdate: number, delta: number, alpha: number,
   ): void {
-    this.fps.update();
-
     // systems
     this.renderSystem.render(lastUpdate, delta, alpha);
+
+    // render
+    engine.engine.beginFrame();
+    engine.scene.render();
+    engine.engine.endFrame();
+
+    this.fps.update();
 
     requestAnimationFrame(this.tick.bind(this));
   }

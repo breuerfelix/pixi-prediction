@@ -1,38 +1,33 @@
-import Store from 'singletons/store';
-import {Container} from 'pixi.js';
 import {eventSystem, Event} from 'global/event';
 import {Entity} from 'global/ecs';
-import {Graphics} from 'pixi.js';
+import engine from 'global/engine';
+import {Mesh} from 'babylonjs';
 
 export class RenderSystem {
-  scene: Container;
-
+  testmesh: Mesh;
   constructor() {
-    this.scene = new Container();
-
     eventSystem.on(Event.NewEntity, this.newEntity.bind(this));
   }
 
   newEntity(entity: Entity): void {
     if (entity.position) {
-      const sprite = new Graphics();
-      sprite
-        .beginFill(0xDE3249)
-        .drawRect(entity.position.x, entity.position.y, 100, 100)
-        .endFill();
+      const mesh = Mesh.CreateBox(entity.ID, 2, engine.scene);
+      const { x, y, z } = entity.position;
+      mesh.position.set(x, y, z);
+      this.testmesh = mesh;
 
-      this.scene.addChild(sprite);
-      entity.asset = {
-        sprite,
+      entity.mesh = {
+        mesh,
       };
-
     }
   }
 
   render(
     lastUpdate: number, delta: number, alpha: number,
   ): void {
-    Store.renderer.render(this.scene);
+    if (this.testmesh == null) return;
+    const { x, y, z } = this.testmesh.position;
+    this.testmesh.position.set(x + 0.01, y + 0.01, z + 0.01);
   }
 
 }

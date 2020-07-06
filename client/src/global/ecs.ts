@@ -1,9 +1,9 @@
 import {EntityManager} from 'lib';
 import {Entity as BaseEntity} from 'shared';
-import {AssetComponent} from 'components/asset';
+import {MeshComponent} from 'components/mesh';
 
 export interface Entity extends BaseEntity {
-  asset?: AssetComponent;
+  mesh?: MeshComponent;
 }
 
 export const entityManager = new EntityManager<Entity>();

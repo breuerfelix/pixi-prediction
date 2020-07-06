@@ -18,13 +18,11 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.7.2",
+    "babylonjs": "^4.1.0",
     "lib": "file:../lib",
     "pino": "^6.2.1",
-    "pixi-text-input": "^1.0.5",
-    "pixi.js": "^5.2.2",
     "shared": "file:../shared",
-    "stats.js": "^0.17.0",
-    "vector2d-extended": "^0.1.1"
+    "stats.js": "^0.17.0"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
