@@ -9,8 +9,9 @@ let LOOP: Loop =  null;
 const STAGE = new Container();
 let ping = 0;
 
-window.addEventListener('keyup', e => input.upListener(e.code, ping / 2));
-window.addEventListener('keydown', e => input.downListener(e.code, ping / 2));
+// TODO delay input for ping / 2 for the client only for better prediction
+window.addEventListener('keyup', e => input.upListener(e.code));
+window.addEventListener('keydown', e => input.downListener(e.code));
 
 class Loop extends BasicLoop {
   constructor() {
@@ -118,9 +119,6 @@ class Socket {
     const data = JSON.parse(message.data);
     if (data.type == 'sync') {
       LOOP.sync(data.timestamp);
-
-      //const player = new Player(50, 50);
-      //STAGE.addChild(player.sprite);
     }
 
     if (data.type == 'serverUpdate') {
