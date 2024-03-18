@@ -28,7 +28,7 @@ rules:
     - single
   'semi':
     - error
-    - always
+    - never
   'no-console': off
   'no-empty': error
   'keyword-spacing': error

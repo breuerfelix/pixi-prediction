@@ -1,4 +1,4 @@
-import {WebSocket} from 'uWebSockets.js';
+import {WebSocket} from 'uWebSockets.js'
 export interface SocketComponent {
   ws: WebSocket;
 }

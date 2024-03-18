@@ -1,4 +1,4 @@
-import {Container} from 'pixi.js';
+import {Container} from 'pixi.js'
 
 // TODO add jsDocs for this module
 
@@ -20,36 +20,36 @@ export type subscribeFunction =
   (callback: resizeCallback) => () => void;
 
 export class PinnedContainer extends Container {
-  static subscribeResizeEvent: subscribeFunction;
-  unsubscribeResizeEvent: () => void;
+  static subscribeResizeEvent: subscribeFunction
+  unsubscribeResizeEvent: () => void
 
-  location: Pin;
-  offsetX: number;
-  offsetY: number;
+  location: Pin
+  offsetX: number
+  offsetY: number
 
   constructor(
     pinnedLocation: Pin,
     offsetX = 0,
     offsetY = 0,
   ) {
-    super();
+    super()
 
-    this.location = pinnedLocation;
-    this.offsetX = offsetX;
-    this.offsetY = offsetY;
+    this.location = pinnedLocation
+    this.offsetX = offsetX
+    this.offsetY = offsetY
 
-    this.unsubscribeResizeEvent = null;
+    this.unsubscribeResizeEvent = null
 
     // automatically subscribe to resize Event
     if (PinnedContainer.subscribeResizeEvent) {
       this.unsubscribeResizeEvent =
-        PinnedContainer.subscribeResizeEvent(this.resize.bind(this));
+        PinnedContainer.subscribeResizeEvent(this.resize.bind(this))
     }
   }
 
   resize(width: number, height: number, scale = 1): void {
     // apply scaling before calculating
-    this.scale.set(scale);
+    this.scale.set(scale)
 
     const positionDict = {
       startX: (): number => this.offsetX * scale,
@@ -62,22 +62,22 @@ export class PinnedContainer extends Container {
         width - this.width - (this.offsetX * scale),
       endY: (): number =>
         height - this.height - (this.offsetY * scale),
-    };
+    }
 
-    const positions = this.location.split(':');
+    const positions = this.location.split(':')
     this.position.set(
       positionDict[positions[0] + 'X'](),
       positionDict[positions[1] + 'Y'](),
-    );
+    )
   }
 
   destroy(options: any): void {
     if (this.unsubscribeResizeEvent) {
-      this.unsubscribeResizeEvent();
+      this.unsubscribeResizeEvent()
     }
 
-    super.destroy(options);
+    super.destroy(options)
   }
 }
 
-export default PinnedContainer;
+export default PinnedContainer

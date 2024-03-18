@@ -1,6 +1,6 @@
-import {Entity, Component} from './ecs';
+import {Entity, Component} from './ecs'
 
 export {
   Entity,
   Component,
-};
+}

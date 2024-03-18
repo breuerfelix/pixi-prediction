@@ -1,2 +1,2 @@
-import socket from './global/socket';
-const app = socket;
+import socket from './global/socket'
+const app = socket

@@ -1,32 +1,32 @@
-import {Renderer, Container, Ticker} from 'pixi.js';
+import {Renderer, Container, Ticker} from 'pixi.js'
 
 class Store {
-  renderer: Renderer;
-  ticker: Ticker;
-  activeScene: Container;
+  renderer: Renderer
+  ticker: Ticker
+  activeScene: Container
 
-  fontFamily: string;
-  UIScale: number;
+  fontFamily: string
+  UIScale: number
 
   init(renderer: Renderer, ticker: Ticker, UIScale = 1): void {
-    this.renderer = renderer;
-    this.ticker = ticker;
-    this.activeScene = new Container();
+    this.renderer = renderer
+    this.ticker = ticker
+    this.activeScene = new Container()
 
-    this.UIScale = UIScale;
-    this.fontFamily = 'monospace';
+    this.UIScale = UIScale
+    this.fontFamily = 'monospace'
 
     //this.ticker.add(this.render.bind(this));
   }
 
   render(): void {
-    this.renderer.render(this.activeScene);
+    this.renderer.render(this.activeScene)
   }
 
   changeScene(newScene: Container): void {
-    this.activeScene = newScene;
+    this.activeScene = newScene
     // TODO maybe fire change scene event
   }
 }
 
-export default new Store();
+export default new Store()

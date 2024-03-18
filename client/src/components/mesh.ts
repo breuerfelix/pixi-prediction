@@ -1,4 +1,4 @@
-import {Mesh} from 'babylonjs';
+import {Mesh} from 'babylonjs'
 
 export interface MeshComponent {
   mesh: Mesh;
